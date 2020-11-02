@@ -1,0 +1,35 @@
+# Orcheastring cloud with kubernetes
+--cloud shell commands---
+gcloud auth list
+gcloud config list project
+
+gcloud config set compute/zone {Zone}
+gcloud  container clusters create {cluster name}
+
+---now , clone your app 
+after this, move to the desired directory
+
+kubectl create deployment nginx --image=nginx:1.10.0
+kubectl get pods
+kubectl expose deployment nginx --port 80 --type LoadBalancer
+kubectl get services
+
+--now use curl command on the external ip exposed by nginx
+
+--we can create pods using our own yaml configuration files for pods using kubectl command
+kubectl create -f {config file}
+kubectl get pods
+
+--if you want to interact with pods, one has to use put-forward command as pods have a private ip addres..you need this to map a local port to port inside monolith pod
+--if you need to use a shell inside a pod, following command mighth be helpful:
+kubectl exec monolith --stdin --tty -c monolith /bin/sh
+
+----Creating services with kubectl command( services provide stable end points for pods)
+  
+kubectl create secret generic tls-certs --from-file tls/
+kubectl create configmap nginx-proxy-conf --from-file nginx/proxy.conf
+kubectl create -f pods/secure-monolith.yaml
+
+Note- Use your own configuration file while doing this
+
+  
